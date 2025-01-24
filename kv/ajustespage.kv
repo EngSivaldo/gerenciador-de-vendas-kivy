@@ -1,3 +1,8 @@
 <AjustesPage>:
-    Label: 
-        text: 'Pagina de ajustes'
+    GridLayout:
+        rows: 1  # Define que haverá apenas uma linha no layout de grade
+        Label:
+            text: 'Pagina de ajustes'  # Exibe o texto "Pagina de ajustes"
+        Button:
+            text: 'Voltar'  # Exibe o texto "Voltar"
+            on_press: app.mudar_tela('homepage')  # Chama o método mudar_tela para trocar para a tela inicial

@@ -1,15 +1,16 @@
-#: include kv/homepage.kv
-#: include kv/ajustespage.kv
+#:kivy 2.0.0
+#:include kv/homepage.kv
+#:include kv/ajustespage.kv
 
-ScreenManager:
-    id: screen_manager
-    HomePage:
-        name: "homepage"
-        id: homepage
-    AjustesPage:
-        name: "ajustespage"
-        id: ajustespage
-    
+GridLayout:
+    rows: 1  # Define que haverá apenas uma linha no layout de grade
+    ScreenManager:
+        id: screen_manager
+        HomePage:
+            name: "homepage"
+            id: homepage
+        AjustesPage:
+            name: "ajustespage"
+            id: ajustespage
 
-
-
+# Certifique-se de que os arquivos kv/homepage.kv e kv/ajustespage.kv existam e estejam corretos.

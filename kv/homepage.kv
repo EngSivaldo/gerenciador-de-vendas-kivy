@@ -1,5 +1,8 @@
 <HomePage>:
-    Label:
-        text: "HomePage"
-
-
+    GridLayout:
+        rows: 1  # Define que haverá apenas uma linha no layout de grade
+        Label:
+            text: "HomePage"  # Exibe o texto "HomePage"
+        Button:
+            text: 'Ir para ajustes'  # Exibe o texto "Ir para ajustes"
+            on_release: app.mudar_tela("ajustespage")  # Chama o método mudar_tela para trocar para a tela de ajustes
