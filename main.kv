@@ -1,10 +1,23 @@
 #:kivy 2.0.0
 #:include kv/homepage.kv
 #:include kv/ajustespage.kv
+#:import utils kivy.utils
 
-GridLayout:
-    rows: 1  # Define que haverá apenas uma linha no layout de grade
+FloatLayout:
+    canvas: 
+        Color: 
+            # rgb: (0.266, 0.447, 0.768, 1)
+            rgb: utils.get_color_from_hex("#001824")
+        Rectangle:
+            size: self.size 
+            pos: self.pos
+    Image:
+        pos_hint: {'right':1, 'top': 0.9}
+        size_hint: 1, 0.2
+        source: 'icones/hash.png'
     ScreenManager:
+        pos_hint: {'right': 1, 'top': 0.7}
+        size_hint: 1, 0.7
         id: screen_manager
         HomePage:
             name: "homepage"
