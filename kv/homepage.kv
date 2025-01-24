@@ -1,8 +1,16 @@
 <HomePage>:
-    GridLayout:
-        rows: 1  # Define que haverá apenas uma linha no layout de grade
+    FloatLayout:
+        canvas: 
+            Rectangle:
+                size: self.size 
+                pos: self.pos
+                source: "icones/bg1.png"
         Label:
+            pos_hint: {"height":1 ,"top": 1}
+            size_hint: 1, 0.85
             text: "HomePage"  # Exibe o texto "HomePage"
         Button:
+            pos_hint: {"height": 1 ,"top": 0.15}
+            size_hint: 0.33, 0.15
             text: 'Ir para ajustes'  # Exibe o texto "Ir para ajustes"
             on_release: app.mudar_tela("ajustespage")  # Chama o método mudar_tela para trocar para a tela de ajustes
