@@ -5,10 +5,11 @@
                 size: self.size 
                 pos: self.pos
                 source: "icones/bg1.png"
-        Label:
+        LabelButton:
             pos_hint: {"height":1 ,"top": 1}
             size_hint: 1, 0.85
             text: 'Pagina de ajustes'  # Exibe o texto "Pagina de ajustes"
+            on_release: app.mudar_tela("homepage")
         Button:
             pos_hint: {"height": 0.33 ,"top": 0.15}
             size_hint: 0.33, 0.15

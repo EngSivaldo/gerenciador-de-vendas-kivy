@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.lang import Builder
-from telas import HomePage, AjustesPage
-from botoes import LabelButton
+from telas import *
+from botoes import *
 
 # Carregar o arquivo KV
 GUI = Builder.load_file("main.kv")
