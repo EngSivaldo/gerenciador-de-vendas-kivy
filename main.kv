@@ -1,13 +1,11 @@
 #:kivy 2.0.0
 #:include kv/homepage.kv
 #:include kv/ajustespage.kv
-#:import utils kivy.utils
 
 FloatLayout:
     canvas: 
         Color: 
-            # rgb: (0.266, 0.447, 0.768, 1)
-            rgb: utils.get_color_from_hex("#001824")
+            rgb: (0.0, 0.094, 0.141)  # Cor manualmente convertida do hexadecimal #001824 para RGB
         Rectangle:
             size: self.size 
             pos: self.pos
@@ -24,6 +22,21 @@ FloatLayout:
             id: homepage
         AjustesPage:
             name: "ajustespage"
-            id: ajustespage
 
-# Certifique-se de que os arquivos kv/homepage.kv e kv/ajustespage.kv existam e estejam corretos.
+<HomePage>:
+    FloatLayout:
+        canvas: 
+            Rectangle:
+                size: self.size 
+                pos: self.pos
+                source: "icones/bg1.png"
+        LabelButton:
+            pos_hint: {"height": 1, "top": 1}
+            size_hint: 1, 0.85
+            text: "estou na HomePage - Ir para ajustes"
+            on_release: app.mudar_tela("ajustespage")
+        Button:
+            pos_hint: {"height": 1, "top": 0.15}
+            size_hint: 0.33, 0.15
+            text: 'Ir para ajustes'
+            on_release: app.mudar_tela("ajustespage")
