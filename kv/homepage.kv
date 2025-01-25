@@ -6,13 +6,13 @@
                 pos: self.pos
                 source: "icones/bg1.png"
         LabelButton:
-            pos_hint: {"height":1 ,"top": 1}
+            pos_hint: {"right":1 ,"top": 1}
             size_hint: 1, 0.85
             text: "estou na HomePage - Ir para ajustes"  # Exibe o texto "HomePage"
             color: 1, 1, 1, 1
             on_release: app.mudar_tela("ajustespage")
         Button:
-            pos_hint: {"height": 1 ,"top": 0.15}
+            pos_hint: {"right": 1 ,"top": 0.15}
             size_hint: 0.33, 0.15
             text: 'Ir para ajustes'  # Exibe o texto "Ir para ajustes"
             on_release: app.mudar_tela("ajustespage")  # Chama o método mudar_tela para trocar para a tela de ajustes
