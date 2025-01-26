@@ -6,23 +6,24 @@
                 pos: self.pos
                 source: "icones/bg1.png"  # Define uma imagem de fundo para o layout
         Label:
-            canvas.before:# antes
+            canvas.before:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-                    source: "icones/botao_fino.png"  # Define uma imagem de fundo para o rótulo (label)
-                                 
+                    source: "icones/botao_fino.png"  # Define uma imagem de fundo para o rótulo (label)                    
             pos_hint: {"right": 0.85, "top": 0.95}  # Define a posição do rótulo dentro do layout
             size_hint: 0.7, 0.2  # Define o tamanho do rótulo dentro do layout
             bold: True  # Define o texto como negrito
             text: 'Seu ID Único: 1'  # Exibe o texto "Seu ID Único: 1" no rótulo
             id: id_vendedor  # Define um identificador para o rótulo
+
         # Botão para mudar a foto de perfil
         ImageButton:
             pos_hint: {'right': 0.5, 'top': 0.7}  # Define a posição do botão dentro do layout
             size_hint: 0.5, 0.15  # Define o tamanho do botão dentro do layout
             source: "icones/foto_perfil.png"  # Define a imagem do botão
             on_release: print('Ir para tela mudar foto de perfil')  # Ação ao clicar no botão
+
         LabelButton:  
             pos_hint: {'right': 0.9, 'top': 0.7}  # Define a posição do botão de texto dentro do layout
             size_hint: 0.5, 0.15  # Define o tamanho do botão de texto dentro do layout
@@ -35,6 +36,7 @@
             size_hint: 0.5, 0.15  # Define o tamanho do botão dentro do layout
             source: "icones/adicionar_vendedor.png"  # Define a imagem do botão
             on_release: print('Ir para tela acompanhar vendedor')  # Ação ao clicar no botão
+
         LabelButton:  
             pos_hint: {'right': 0.9, 'top': 0.5}  # Define a posição do botão de texto dentro do layout
             size_hint: 0.5, 0.15  # Define o tamanho do botão de texto dentro do layout
@@ -47,6 +49,7 @@
             size_hint: 0.5, 0.15  # Define o tamanho do botão dentro do layout
             source: "icones/vendas_empresa.png"  # Define a imagem do botão
             on_release: print('Ir para tela Ver Todas as vendas')  # Ação ao clicar no botão
+
         LabelButton:  
             pos_hint: {'right': 0.9, 'top': 0.3}  # Define a posição do botão de texto dentro do layout
             size_hint: 0.5, 0.15  # Define o tamanho do botão de texto dentro do layout
@@ -55,16 +58,16 @@
 
         # Botão de voltar
         FloatLayout:
-            pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout flutuante dentro do layout
-            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do layout
+            pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout
+            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do la
             canvas: 
                 Color: 
-                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como um tom de azul piscina mais escuro com 50% de transparência
+                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como 
                 Rectangle:
                     size: self.size
                     pos: self.pos
             ImageButton:
-                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão dentro do layout flutuante
-                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout flutuante
+                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão de
+                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout 
                 source: "icones/voltar.png"  # Define a imagem do botão
-                on_release: app.mudar_tela('homepage')  # Chama o método mudar_tela para trocar para a tela
+                on_release: app.mudar_tela('homepage')  # Chama o método mudar_tela 
