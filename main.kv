@@ -1,6 +1,13 @@
 #:kivy 2.0.0
 #:include kv/homepage.kv
 #:include kv/ajustespage.kv
+#:include kv/adicionarvendaspage.kv
+#:include kv/adicionarvendedorpage.kv
+#:include kv/fotoperfilpage.kv
+#:include kv/listarvendedorespage.kv
+#:include kv/todasvendaspage.kv
+#:import utils kivy.utils
+
 
 FloatLayout:
     canvas: 
@@ -19,5 +26,24 @@ FloatLayout:
         id: screen_manager
         HomePage:
             name: "homepage"
+            id: homepage
         AjustesPage:
             name: "ajustespage"
+            id: ajustespage
+        AdicionarVendasPage:
+            name: "adicionarvendaspage"
+            id: adicionarvendaspage
+        AdicionarVendedorPage:
+            name: "adicionarvendedorpage"
+            id: adicionarvendedorpage
+        FotoPerfilPage:
+            name: "fotoperfilpage"
+            id: fotoperfilpage
+        ListarVendedoresPage:
+            name: "listarvendedorespage"
+            id: listarvendedorespage
+        TodasVendasPage:
+            name: "todasvendaspage"
+            id: todasvendaspage
+        
+

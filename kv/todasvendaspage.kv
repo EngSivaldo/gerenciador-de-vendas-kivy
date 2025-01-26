@@ -1,0 +1,30 @@
+<TodasVendasPage>:
+    FloatLayout:
+        canvas:
+            Rectangle:
+                size: self.size 
+                pos: self.pos
+                source: "icones/bg1.png"
+        Label:
+            pos_hint: {"right": 0.85, "top": 0.95}
+            size_hint: 0.7, 0.2
+            bold: True
+            text: 'Todas Vendas Page'
+        FloatLayout:
+            pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout
+            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do la
+            canvas: 
+                Color: 
+                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como 
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ImageButton:
+                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão de
+                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout 
+                source: "icones/voltar.png"  # Define a imagem do botão
+                on_release: app.mudar_tela('ajustespage')  # Chama o método mudar_tela 
+
+
+
+
