@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from telas import *
 from botoes import *
+from banner_venda import BannerVenda
 import requests   
 
 # Carregar o arquivo KV
@@ -29,10 +30,17 @@ class MainApp(App):
         #preencher lista de vendas==========================
         try:
             vendas = requisicao_dic['vendas'][1:]
-            for venda in vendas:
-                print(venda)   
-                venda['cliente']
-                venda['data']
+            for venda in vendas:  #cria banner e depois adicionar no gridlayout no homepage
+                banner = BannerVenda(cliente=venda['cliente'], foto_cliente=venda['foto_cliente'],
+                                       produto=venda['produto'], foto_produto=venda['foto_produto'],
+                                       data=venda['data'], prco=venda['preco'],
+                                       unidade=venda['unidade'], quantidade=venda['quantidade']) 
+                pagina_homepage = self.root.ids['homepage']
+                lista_vendas = pagina_homepage.ids['lista_vendas']
+                lista_vendas.add_widget(banner) 
+                 ##criar a classe BannerVenda, no arquivo banner_venda.py
+
+               
         except:
             pass
 
