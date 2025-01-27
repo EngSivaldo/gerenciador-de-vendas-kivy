@@ -17,9 +17,12 @@ class MainApp(App):
     def on_start(self):
         requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.id_usuario}.json")
         requisicao_dic = requisicao.json()
-        avatar = requisicao_dic['avatar']
-        print(avatar)
         # print(requisicao.json())
+        avatar = requisicao_dic['avatar']
+        # print(avatar) 
+        foto_perfil = self.root.ids['foto_perfil']
+        foto_perfil.source = f'icones/fotos_perfil/{avatar}'
+       
 
 
     
