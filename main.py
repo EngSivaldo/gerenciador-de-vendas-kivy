@@ -15,14 +15,26 @@ class MainApp(App):
 
     #executa assim que ele inicia
     def on_start(self):
+        #pegar info dos usuarios============================
         requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.id_usuario}.json")
         requisicao_dic = requisicao.json()
         # print(requisicao.json())
+        #preencher foto de perfil ==========================
         avatar = requisicao_dic['avatar']
         # print(avatar) 
         foto_perfil = self.root.ids['foto_perfil']
         foto_perfil.source = f'icones/fotos_perfil/{avatar}'
-       
+        # print(requisicao_dic)
+
+        #preencher lista de vendas==========================
+        try:
+            vendas = requisicao_dic['vendas'][1:]
+            for venda in vendas:
+                print(venda)   
+                venda['cliente']
+                venda['data']
+        except:
+            pass
 
 
     
