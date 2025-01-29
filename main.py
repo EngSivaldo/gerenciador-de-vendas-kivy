@@ -4,6 +4,7 @@ from kivy.lang import Builder
 from telas import *
 from botoes import *
 from banner_venda import BannerVenda
+import os
 import requests   
 
 # Carregar o arquivo KV
@@ -17,7 +18,19 @@ class MainApp(App):
 
     # Executa assim que ele inicia
     def on_start(self):
-        # Pegar info dos usuarios
+        #carregar as fotos de perfil
+        arquivos = os.listdir('icones/fotos_perfil')
+        pagina_fotoperfil = self.root.ids['fotoperfilpage']
+        lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
+        for foto in arquivos:
+            imagem = ImageButton(source=f'icones/fotos_perfil/{foto}', on_release=self.mudar_foto_perfil)
+            lista_fotos.add_widget(imagem)
+
+        self.carregar_infos_usuario()
+      
+
+    def carregar_infos_usuario(self):
+          # Pegar info dos usuarios
         requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.id_usuario}.json")
         requisicao_dic = requisicao.json()
         print("Requisição JSON:", requisicao_dic)
@@ -31,6 +44,8 @@ class MainApp(App):
         # Preencher lista de vendas
         try:
             vendas = requisicao_dic['vendas'][1:]
+            pagina_homepage = self.root.ids['homepage']
+            lista_vendas = pagina_homepage.ids['lista_vendas']
             for venda in vendas:  # Cria banner e depois adicionar no gridlayout no homepage
                 print("Dados da venda:", venda)
                 banner = BannerVenda(
@@ -39,13 +54,17 @@ class MainApp(App):
                     data=venda['data'], preco=venda['preco'],
                     unidade=venda['unidades'], quantidade=venda['quantidade']
                 )
-                pagina_homepage = self.root.ids['homepage']
-                lista_vendas = pagina_homepage.ids['lista_vendas']
+               
                 lista_vendas.add_widget(banner)
-                print("Banner adicionado para:", venda['cliente'])
+                # print("Banner adicionado para:", venda['cliente'])
 
         except Exception as e:
             print("Erro ao preencher a lista de vendas:", e)
+            
+
+    def mudar_foto_perfil(self, *args):
+        print("mudar foto perfil")
+
 
     def mudar_tela(self, id_tela):
         # Obter o gerenciador de telas usando o id

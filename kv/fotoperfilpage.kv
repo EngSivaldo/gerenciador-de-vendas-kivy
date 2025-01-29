@@ -7,21 +7,33 @@
                 source: "icones/bg1.png"
         Label:
             pos_hint: {"right": 0.85, "top": 0.95}
-            size_hint: 0.7, 0.2
+            size_hint: 0.7, 0.1
             bold: True
-            text: 'Foto Perfil Page'
+            text: 'Selecione sua Foto de Perfil'
+        # Lista de imagens
+        ScrollView:
+            pos_hint: {"right": 0.9, "top": 0.85}
+            size_hint: 0.8, 0.73
+            GridLayout:
+                cols: 3
+                id: lista_fotos_perfil
+                size_hint_y: None
+                spacing: 5, 5 # Espaço entre imagens
+                height: self.minimum_height
+                row_default_height: '90dp'
+                row_force_default: True
+        # Botão de voltar
         FloatLayout:
             pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout
-            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do la
+            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do layout
             canvas: 
                 Color: 
-                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como 
+                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como uma cor RGBA
                 Rectangle:
                     size: self.size
                     pos: self.pos
             ImageButton:
-                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão de
-                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout 
+                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão de imagem
+                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout flutuante
                 source: "icones/voltar.png"  # Define a imagem do botão
-                on_release: app.mudar_tela('ajustespage')  # Chama o método mudar_tela 
-         
+                on_release: app.mudar_tela('ajustespage')  # Chama o método mudar_tela ao clicar no botão
