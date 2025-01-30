@@ -5,7 +5,10 @@ from telas import *
 from botoes import *
 from banner_venda import BannerVenda
 import os
+from functools import partial
+import json
 import requests   
+
 
 # Carregar o arquivo KV
 GUI = Builder.load_file("main.kv")
@@ -23,7 +26,7 @@ class MainApp(App):
         pagina_fotoperfil = self.root.ids['fotoperfilpage']
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
         for foto in arquivos:
-            imagem = ImageButton(source=f'icones/fotos_perfil/{foto}', on_release=self.mudar_foto_perfil)
+            imagem = ImageButton(source=f'icones/fotos_perfil/{foto}', on_release=partial(self.mudar_foto_perfil, foto))
             lista_fotos.add_widget(imagem)
 
         self.carregar_infos_usuario()
@@ -62,15 +65,31 @@ class MainApp(App):
             print("Erro ao preencher a lista de vendas:", e)
             
 
-    def mudar_foto_perfil(self, *args):
-        print("mudar foto perfil")
-
-
     def mudar_tela(self, id_tela):
         # Obter o gerenciador de telas usando o id
         gerenciador_telas = self.root.ids['screen_manager']
         # Alterar a tela atual para a tela com o id fornecido
         gerenciador_telas.current = id_tela
+
+
+     #funcao trocar foto de perfil, chamada como parametro na funcao on_start
+    def mudar_foto_perfil(self, foto, *args):
+        print(foto)
+        foto_perfil = self.root.ids['foto_perfil']
+        foto_perfil.source = f'icones/fotos_perfil/{foto}'
+
+        info = f'{{"avatar": "{foto}"}}'
+        # info = {'avatar': foto} #outra forma de fazer troca de foto
+        requisicao = requests.patch(
+            f'https://apilactivovendashash-default-rtdb.firebaseio.com/{self.id_usuario}.json',
+            data=info)
+            # data=json.dumps(info),
+            # headers={"Content-Type": "application/json"}
+
+        self.mudar_tela('ajustespage')
+        # print(requisicao.json())
+    
+        # print(requisicao)
 
 if __name__ == "__main__":
     MainApp().run()
