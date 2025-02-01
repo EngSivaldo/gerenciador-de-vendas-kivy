@@ -1,0 +1,63 @@
+<LoginPage>:
+    FloatLayout:
+        # Background image
+        canvas:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'icones/bg1.png'
+                
+        # Title formatting
+        Label:
+            text: "Controle de [color=#00cfde] Vendas Hashtag[/color]"
+            bold: True
+            markup: True
+            pos_hint: {'right': 0.9, 'top': 0.9}
+            size_hint: 0.8, 0.2
+
+        # Email input field
+        TextInput:
+            id: email
+            hint_text: 'E-mail'
+            size_hint: 0.8, 0.1
+            pos_hint: {'right': 0.9, 'top': 0.7}
+
+        # Password input field
+        TextInput:
+            id: senha
+            password: True
+            hint_text: 'Digite sua senha'
+            size_hint: 0.8, 0.1
+            pos_hint: {'right': 0.9, 'top': 0.55}
+
+        # Subtitle
+        Label:
+            text: '[color=#00cfde] Faça seu Login [/color]'
+            bold: True
+            markup: True
+            pos_hint: {'right': 0.9, 'top': 0.4}
+            size_hint: 0.8, 0.1
+
+        # Login button
+        LabelButton:
+            canvas:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state == 'normal' else 'icones/botao_apertado.png '
+            on_release: print('Faça login')
+            text: 'Faça seu Login'
+            pos_hint: {'right': 0.45, 'top': 0.3}
+            size_hint: 0.4, 0.2
+
+        # Create account button
+        LabelButton:
+            canvas:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state == 'normal' else 'icones/botao_apertado.png'
+            on_release: print('Criar conta')
+            text: 'Criar Conta'
+            pos_hint: {'right': 0.95, 'top': 0.3}
+            size_hint: 0.4, 0.2

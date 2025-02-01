@@ -24,6 +24,10 @@ class TodasVendasPage(Screen):
     pass
 
 
+class LoginPage(Screen):
+    pass
+
+
 
 #passo 1 -> criar classes no telas
 #passo 2 -> criar arquivo.kv na pasta kv
