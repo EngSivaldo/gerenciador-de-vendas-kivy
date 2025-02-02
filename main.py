@@ -8,6 +8,7 @@ import os
 from functools import partial
 import json
 import requests   
+from myfirebase import MyFirebase
 
 
 # Carregar o arquivo KV
@@ -17,6 +18,7 @@ class MainApp(App):
     id_usuario = 1
     # Constroe parte visual
     def build(self):
+        self.firebase = MyFirebase()
         return GUI
 
     # Executa assim que ele inicia

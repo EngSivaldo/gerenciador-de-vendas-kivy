@@ -17,14 +17,14 @@
 
         # Email input field
         TextInput:
-            id: email
+            id: email_input
             hint_text: 'E-mail'
             size_hint: 0.8, 0.1
             pos_hint: {'right': 0.9, 'top': 0.7}
 
         # Password input field
         TextInput:
-            id: senha
+            id: senha_input
             password: True
             hint_text: 'Digite sua senha'
             size_hint: 0.8, 0.1
@@ -40,7 +40,7 @@
 
         # Login button
         LabelButton:
-            canvas:
+            canvas.before:
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -52,12 +52,12 @@
 
         # Create account button
         LabelButton:
-            canvas:
+            canvas.before:
                 Rectangle:
                     pos: self.pos
                     size: self.size
                     source: 'icones/botao.png' if self.state == 'normal' else 'icones/botao_apertado.png'
-            on_release: print('Criar conta')
+            on_release: app.firebase.criar_conta(email_input.text, senha_input.text)
             text: 'Criar Conta'
             pos_hint: {'right': 0.95, 'top': 0.3}
             size_hint: 0.4, 0.2
