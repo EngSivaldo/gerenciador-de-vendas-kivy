@@ -42,9 +42,10 @@ class MyFirebase():
 
             # Cria um usuário no banco de dados Firebase Realtime Database
             link = f'https://apilactivovendashash-default-rtdb.firebaseio.com/{local_id}.json'
-            info_usuario = json.dumps({"avatar": "foto10.png", "equipe": "", "total_venda": "0", "vendas": ""})
+            info_usuario = json.dumps({"avatar": "maria.jpg", "equipe": "", "total_venda": "0", "vendas": ""})
             headers = {"Content-Type": "application/json"}
             requisicao_usuario = requests.patch(link, data=info_usuario, headers=headers)
+            meu_aplicativo.carregar_infos_usuario()
             # Muda a tela do aplicativo para 'homepage'
             meu_aplicativo.mudar_tela('homepage')
 
