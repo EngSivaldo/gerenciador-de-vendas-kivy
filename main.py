@@ -75,18 +75,28 @@ class MainApp(App):
 
 
      #funcao trocar foto de perfil, chamada como parametro na funcao on_start
+    # função para trocar a foto de perfil, chamada como parâmetro na função on_start
     def mudar_foto_perfil(self, foto, *args):
         print(foto)
         foto_perfil = self.root.ids['foto_perfil']
         foto_perfil.source = f'icones/fotos_perfil/{foto}'
 
-        info = f'{{"avatar": "{foto}"}}'
-        # info = {'avatar': foto} #outra forma de fazer troca de foto
+        info = json.dumps({"avatar": foto})
+        headers = {"Content-Type": "application/json"}
+
+        # requisição PATCH com headers
         requisicao = requests.patch(
             f'https://apilactivovendashash-default-rtdb.firebaseio.com/{self.id_usuario}.json',
-            data=info)
-            # data=json.dumps(info),
-            # headers={"Content-Type": "application/json"}
+            data=info,
+            headers=headers
+        )
+
+        if requisicao.ok:
+            print('Foto de perfil atualizada com sucesso.')
+            self.mudar_tela('ajustespage')
+        else:
+            print('Erro ao atualizar a foto de perfil:', requisicao.json())
+
 
         self.mudar_tela('ajustespage')
         # print(requisicao.json())
