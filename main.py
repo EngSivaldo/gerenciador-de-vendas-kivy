@@ -36,15 +36,17 @@ class MainApp(App):
     def carregar_infos_usuario(self):    
         try:
             with open('refreshtoken.txt', 'r') as arquivo:
-                refresh_token = arquivo.read()
+                refresh_token = arquivo.read().strip()
+                if not refresh_token:
+                    raise Exception("Refresh token está vazio ou não foi encontrado.")
+
             local_id, id_token = self.firebase.trocar_token(refresh_token)
-            
             self.local_id = local_id
             self.id_token = id_token
 
             requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json")
             requisicao_dic = requisicao.json()
-            # print("Requisição JSON:", requisicao_dic)
+            print("Requisição JSON:", requisicao_dic)
 
             if 'avatar' in requisicao_dic:
                 avatar = requisicao_dic['avatar']
@@ -55,7 +57,7 @@ class MainApp(App):
                 print("Campo 'avatar' não encontrado na resposta JSON.")
             
             if 'vendas' in requisicao_dic and requisicao_dic['vendas']:
-                vendas = requisicao_dic['vendas'][1:]
+                vendas = requisicao_dic['vendas']
                 pagina_homepage = self.root.ids['homepage']
                 lista_vendas = pagina_homepage.ids['lista_vendas']
                 for venda in vendas:
@@ -69,10 +71,10 @@ class MainApp(App):
                     lista_vendas.add_widget(banner)
             else:
                 print("Campo 'vendas' não encontrado ou está vazio na resposta JSON.")
-            self.mudar_tela('homepage') #vai para homepage
             
         except Exception as e:
             print("Erro ao carregar informações do usuário:", e)
+
 
 
 

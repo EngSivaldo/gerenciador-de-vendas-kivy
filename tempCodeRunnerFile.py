@@ -38,26 +38,27 @@ class MainApp(App):
             with open('refreshtoken.txt', 'r') as arquivo:
                 refresh_token = arquivo.read()
             local_id, id_token = self.firebase.trocar_token(refresh_token)
+            
             self.local_id = local_id
             self.id_token = id_token
 
-              # Pegar info dos usuarios
             requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json")
             requisicao_dic = requisicao.json()
-            print("Requisição JSON:", requisicao_dic)
+            # print("Requisição JSON:", requisicao_dic)
 
-            # Preencher foto de perfil
-            avatar = requisicao_dic['avatar']
-            foto_perfil = self.root.ids['foto_perfil']
-            foto_perfil.source = f'icones/fotos_perfil/{avatar}'
-            print("Foto de perfil carregada:", foto_perfil.source)
-
-            # Preencher lista de vendas
-            try:
+            if 'avatar' in requisicao_dic:
+                avatar = requisicao_dic['avatar']
+                foto_perfil = self.root.ids['foto_perfil']
+                foto_perfil.source = f'icones/fotos_perfil/{avatar}'
+                print("Foto de perfil carregada:", foto_perfil.source)
+            else:
+                print("Campo 'avatar' não encontrado na resposta JSON.")
+            
+            if 'vendas' in requisicao_dic and requisicao_dic['vendas']:
                 vendas = requisicao_dic['vendas'][1:]
                 pagina_homepage = self.root.ids['homepage']
                 lista_vendas = pagina_homepage.ids['lista_vendas']
-                for venda in vendas:  # Cria banner e depois adicionar no gridlayout no homepage
+                for venda in vendas:
                     print("Dados da venda:", venda)
                     banner = BannerVenda(
                         cliente=venda['cliente'], foto_cliente=venda['foto_cliente'],
@@ -65,14 +66,16 @@ class MainApp(App):
                         data=venda['data'], preco=venda['preco'],
                         unidade=venda['unidades'], quantidade=venda['quantidade']
                     )
-                
                     lista_vendas.add_widget(banner)
-                    # print("Banner adicionado para:", venda['cliente'])
+            else:
+                print("Campo 'vendas' não encontrado ou está vazio na resposta JSON.")
+            self.mudar_tela('homepage') #vai para homepage
+            
+        except Exception as e:
+            print("Erro ao carregar informações do usuário:", e)
 
-            except Exception as e:
-                print("Erro ao preencher a lista de vendas:", e)
-        except:
-            pass
+
+
             
 
     def mudar_tela(self, id_tela):
@@ -80,36 +83,3 @@ class MainApp(App):
         gerenciador_telas = self.root.ids['screen_manager']
         # Alterar a tela atual para a tela com o id fornecido
         gerenciador_telas.current = id_tela
-
-
-     #funcao trocar foto de perfil, chamada como parametro na funcao on_start
-    # função para trocar a foto de perfil, chamada como parâmetro na função on_start
-    def mudar_foto_perfil(self, foto, *args):
-        print(foto)
-        foto_perfil = self.root.ids['foto_perfil']
-        foto_perfil.source = f'icones/fotos_perfil/{foto}'
-
-        info = json.dumps({"avatar": foto})
-        headers = {"Content-Type": "application/json"}
-
-        # requisição PATCH com headers
-        requisicao = requests.patch(
-            f'https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json',
-            data=info,
-            headers=headers
-        )
-
-        if requisicao.ok:
-            print('Foto de perfil atualizada com sucesso.')
-            self.mudar_tela('ajustespage')
-        else:
-            print('Erro ao atualizar a foto de perfil:', requisicao.json())
-
-
-        self.mudar_tela('ajustespage')
-        # print(requisicao.json())
-    
-        # print(requisicao)
-
-if __name__ == "__main__":
-    MainApp().run()
