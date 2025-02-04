@@ -35,23 +35,30 @@ class MainApp(App):
 
     def carregar_infos_usuario(self):    
         try:
-              # Pegar info dos usuarios
+            with open('refreshtoken.txt', 'r') as arquivo:
+                refresh_token = arquivo.read()
+            local_id, id_token = self.firebase.trocar_token(refresh_token)
+            
+            self.local_id = local_id
+            self.id_token = id_token
+
             requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json")
             requisicao_dic = requisicao.json()
-            print("Requisição JSON:", requisicao_dic)
+            # print("Requisição JSON:", requisicao_dic)
 
-            # Preencher foto de perfil
-            avatar = requisicao_dic['avatar']
-            foto_perfil = self.root.ids['foto_perfil']
-            foto_perfil.source = f'icones/fotos_perfil/{avatar}'
-            print("Foto de perfil carregada:", foto_perfil.source)
-
-            # Preencher lista de vendas
-            try:
+            if 'avatar' in requisicao_dic:
+                avatar = requisicao_dic['avatar']
+                foto_perfil = self.root.ids['foto_perfil']
+                foto_perfil.source = f'icones/fotos_perfil/{avatar}'
+                print("Foto de perfil carregada:", foto_perfil.source)
+            else:
+                print("Campo 'avatar' não encontrado na resposta JSON.")
+            
+            if 'vendas' in requisicao_dic and requisicao_dic['vendas']:
                 vendas = requisicao_dic['vendas'][1:]
                 pagina_homepage = self.root.ids['homepage']
                 lista_vendas = pagina_homepage.ids['lista_vendas']
-                for venda in vendas:  # Cria banner e depois adicionar no gridlayout no homepage
+                for venda in vendas:
                     print("Dados da venda:", venda)
                     banner = BannerVenda(
                         cliente=venda['cliente'], foto_cliente=venda['foto_cliente'],
@@ -59,14 +66,16 @@ class MainApp(App):
                         data=venda['data'], preco=venda['preco'],
                         unidade=venda['unidades'], quantidade=venda['quantidade']
                     )
-                
                     lista_vendas.add_widget(banner)
-                    # print("Banner adicionado para:", venda['cliente'])
+            else:
+                print("Campo 'vendas' não encontrado ou está vazio na resposta JSON.")
+            self.mudar_tela('homepage') #vai para homepage
+            
+        except Exception as e:
+            print("Erro ao carregar informações do usuário:", e)
 
-            except Exception as e:
-                print("Erro ao preencher a lista de vendas:", e)
-        except:
-            pass
+
+
             
 
     def mudar_tela(self, id_tela):
