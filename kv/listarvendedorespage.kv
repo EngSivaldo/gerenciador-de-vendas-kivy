@@ -5,11 +5,22 @@
                 size: self.size 
                 pos: self.pos
                 source: "icones/bg1.png"
-        Label:
-            pos_hint: {"right": 0.85, "top": 0.95}
-            size_hint: 0.7, 0.2
-            bold: True
-            text: 'Listar vendedores Page'
+
+        #lista de vendedores
+        ScrollView:
+            pos_hint: {"right": 1, "top": 0.9}
+            size_hint: 1, 0.78
+            GridLayout:
+                cols: 1
+                id: lista_vendedores 
+                size_hint_y: None
+                spacing: 2, 2
+                height: self.minimum_height
+                row_default_height: '90dp'
+                row_force_default: True
+        
+
+        #botao de voltar
         FloatLayout:
             pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout
             size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do la

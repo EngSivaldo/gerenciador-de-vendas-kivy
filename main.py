@@ -9,6 +9,7 @@ from functools import partial
 import json
 import requests   
 from myfirebase import MyFirebase
+from bannervendedor import BannerVendedor
 
 
 # Carregar o arquivo KV
@@ -108,6 +109,25 @@ class MainApp(App):
             
         except Exception as e:
             print("Erro ao carregar informações do usuário:", e)
+
+       #preencher equipe de vendedores
+        # Preencher equipe de vendedores
+        equipe = requisicao_dic['equipe']
+        lista_equipe = equipe.split(',')
+        pagina_listavendedores = self.root.ids['listarvendedorespage']
+        lista_vendedores = pagina_listavendedores.ids['lista_vendedores']
+
+        for id_vendedor_equipe in lista_equipe:
+            if id_vendedor_equipe:
+                # Criar a instância de BannerVendedor com o ID correto
+                banner_vendedor = BannerVendedor(id_vendedor=id_vendedor_equipe)
+                lista_vendedores.add_widget(banner_vendedor)
+
+
+        
+        self.mudar_tela('homepage')
+
+
 
 
 
