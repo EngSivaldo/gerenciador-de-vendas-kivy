@@ -22,7 +22,7 @@ class MainApp(App):
 
     # Executa assim que ele inicia
     def on_start(self):
-        #carregar as fotos de perfil
+        # Carregar as fotos de perfil
         arquivos = os.listdir('icones/fotos_perfil')
         pagina_fotoperfil = self.root.ids['fotoperfilpage']
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
@@ -30,10 +30,10 @@ class MainApp(App):
             imagem = ImageButton(source=f'icones/fotos_perfil/{foto}', on_release=partial(self.mudar_foto_perfil, foto))
             lista_fotos.add_widget(imagem)
 
-        self.carregar_infos_usuario()
-      
+        self.verificar_usuario_logado()
 
-    def carregar_infos_usuario(self):    
+
+    def verificar_usuario_logado(self):
         try:
             with open('refreshtoken.txt', 'r') as arquivo:
                 refresh_token = arquivo.read().strip()
@@ -43,11 +43,30 @@ class MainApp(App):
             local_id, id_token = self.firebase.trocar_token(refresh_token)
             self.local_id = local_id
             self.id_token = id_token
+            self.carregar_infos_usuario()
+            self.mudar_tela('homepage')  # Redirecionar para a tela principal se o usuário estiver logado
+        except Exception as e:
+            print("Usuário não logado ou erro ao verificar token:", e)
+            self.mudar_tela('loginpage')  # Redirecionar para a tela de login se o usuário não estiver logado
 
+
+      
+    def carregar_infos_usuario(self):
+        try:
+            with open('refreshtoken.txt', 'r') as arquivo:
+                refresh_token = arquivo.read().strip()
+                if not refresh_token:
+                    raise Exception("Refresh token está vazio ou não foi encontrado.")
+
+            local_id, id_token = self.firebase.trocar_token(refresh_token)
+            self.local_id = local_id
+            self.id_token = id_token
+            # pegar info do usuario
             requisicao = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json")
             requisicao_dic = requisicao.json()
             print("Requisição JSON:", requisicao_dic)
 
+            # preencher foto de perfil
             if 'avatar' in requisicao_dic:
                 avatar = requisicao_dic['avatar']
                 foto_perfil = self.root.ids['foto_perfil']
@@ -55,7 +74,22 @@ class MainApp(App):
                 print("Foto de perfil carregada:", foto_perfil.source)
             else:
                 print("Campo 'avatar' não encontrado na resposta JSON.")
-            
+
+            # preencher ID usuario
+            id_vendedor = requisicao_dic['id_vendedor']
+            # atualizar no ajustespage
+            pagina_ajustes = self.root.ids['ajustespage']
+            pagina_ajustes.ids['id_vendedor'].text = f'Seu ID Único: {id_vendedor}'
+
+            # atualizar total de vendas
+            total_vendas = requisicao_dic['total_venda']  # Corrigido de 'total_vendas' para 'total_venda'
+            print(f"Total de Vendas: R${total_vendas}")  # Adicionar print para depuração
+            # atualizar na homepage
+            homepage = self.root.ids['homepage']
+            homepage.ids['label_total_vendas'].markup = True
+            homepage.ids['label_total_vendas'].text = f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
+
+            # preencher lista de vendas
             if 'vendas' in requisicao_dic and requisicao_dic['vendas']:
                 vendas = requisicao_dic['vendas']
                 pagina_homepage = self.root.ids['homepage']
@@ -77,17 +111,12 @@ class MainApp(App):
 
 
 
-
-            
-
     def mudar_tela(self, id_tela):
         # Obter o gerenciador de telas usando o id
         gerenciador_telas = self.root.ids['screen_manager']
         # Alterar a tela atual para a tela com o id fornecido
         gerenciador_telas.current = id_tela
 
-
-     #funcao trocar foto de perfil, chamada como parametro na funcao on_start
     # função para trocar a foto de perfil, chamada como parâmetro na função on_start
     def mudar_foto_perfil(self, foto, *args):
         print(foto)
@@ -110,11 +139,7 @@ class MainApp(App):
         else:
             print('Erro ao atualizar a foto de perfil:', requisicao.json())
 
-
         self.mudar_tela('ajustespage')
-        # print(requisicao.json())
-    
-        # print(requisicao)
 
 if __name__ == "__main__":
     MainApp().run()

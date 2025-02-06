@@ -1,3 +1,4 @@
+# main.kv
 <HomePage>:
     FloatLayout:
         canvas:
@@ -10,13 +11,12 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
-                    source: "icones/botao_fino.png"  # Define uma imagem de fundo para o rótulo (label)                    
-            pos_hint: {"right": 0.85, "top": 0.95}  # Define a posição do rótulo dentro do layout
-            size_hint: 0.7, 0.2  # Define o tamanho do rótulo dentro do layout
-            text: 'Total de Vendas R$ 1'  # Exibe o texto "Seu ID Único: 1" no rótulo
-            id: label_total_vendas  # Define um identificador para o rótulo
-            markup: True # pemite parte do texto editado
-        #pemite rolar lista vendas pra cima e baixo
+                    source: "icones/botao_fino.png"
+            pos_hint: {"right": 0.85, "top": 0.95}
+            size_hint: 0.7, 0.2
+            text: '[color=#000000]Total de Vendas:[/color] [b]R$1[/b]'
+            id: label_total_vendas
+            markup: True
         ScrollView:
             pos_hint: {"right": 1, "top": 0.75}
             size_hint: 1, 0.63
@@ -28,16 +28,14 @@
                 height: self.minimum_height
                 row_default_height: '90dp'
                 row_force_default: True
-                    
-            
-       # 3botoes no rodape da homepage
+                
         GridLayout:
-            rows: 1 # Define três colunas no GridLayout
-            pos_hint: {"right": 1, "top": 0.12}  # Define a pos do GridLayout  rodapé
-            size_hint: 1, 0.12  # Define o tamanho do GridLayout
+            rows: 1
+            pos_hint: {"right": 1, "top": 0.12}
+            size_hint: 1, 0.12
             canvas.before:
                 Color:
-                    rgba: (0.75, 0.75, 0.75, 0.5)  # Cor do retângulo de fundo
+                    rgba: (0.75, 0.75, 0.75, 0.5)
                 Rectangle:
                     size: self.size
                     pos: self.pos

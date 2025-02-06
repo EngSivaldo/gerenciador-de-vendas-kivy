@@ -105,6 +105,25 @@ class MyFirebase():
             with open('refreshtoken.txt', 'w') as arquivo:
                 arquivo.write(refresh_token)
 
+            # Atualizar informações do usuário na interface
+            try:
+                dados_usuario = requests.get(f"https://apilactivovendashash-default-rtdb.firebaseio.com/{local_id}.json")
+                dados_usuario.raise_for_status()
+                dados_usuario_dic = dados_usuario.json()
+
+                # Preencher ID do usuário
+                id_vendedor = dados_usuario_dic.get('id_vendedor', '')
+                pagina_ajustes = meu_aplicativo.root.ids['ajustespage']
+                pagina_ajustes.ids['id_vendedor'].text = f'Seu ID Único: {id_vendedor}'
+
+                # Atualizar total de vendas
+                total_vendas = dados_usuario_dic.get('total_venda', '0')
+                homepage = meu_aplicativo.root.ids['homepage']
+                homepage.ids['label_total_vendas'].text = f'Total de Vendas: R${total_vendas}'
+
+            except requests.exceptions.RequestException as e:
+                print(f"Erro ao obter dados do usuário: {e}")
+
             meu_aplicativo.carregar_infos_usuario()
             meu_aplicativo.mudar_tela('homepage')  # Mudar para homepage
         else:  # Se a requisição der errado
