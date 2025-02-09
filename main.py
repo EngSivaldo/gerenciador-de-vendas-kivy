@@ -70,6 +70,7 @@ class MainApp(App):
             # preencher foto de perfil
             if 'avatar' in requisicao_dic:
                 avatar = requisicao_dic['avatar']
+                self.avatar = avatar
                 foto_perfil = self.root.ids['foto_perfil']
                 foto_perfil.source = f'icones/fotos_perfil/{avatar}'
                 print("Foto de perfil carregada:", foto_perfil.source)
@@ -78,21 +79,26 @@ class MainApp(App):
 
             # preencher ID usuario
             id_vendedor = requisicao_dic['id_vendedor']
+            self.id_vendedor = id_vendedor
             # atualizar no ajustespage
             pagina_ajustes = self.root.ids['ajustespage']
             pagina_ajustes.ids['id_vendedor'].text = f'Seu ID Único: {id_vendedor}'
 
             # atualizar total de vendas
             total_vendas = requisicao_dic['total_venda']  # Corrigido de 'total_vendas' para 'total_venda'
-            print(f"Total de Vendas: R${total_vendas}")  # Adicionar print para depuração
+            self.total_vendas = total_vendas
             # atualizar na homepage
             homepage = self.root.ids['homepage']
             homepage.ids['label_total_vendas'].markup = True
             homepage.ids['label_total_vendas'].text = f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
 
+            #preencher equipe
+            self.equipe = requisicao_dic['equipe']
+
             # preencher lista de vendas
             if 'vendas' in requisicao_dic and requisicao_dic['vendas']:
-                vendas = requisicao_dic['vendas']
+                vendas = requisicao_dic['vendas'][1:]
+                self.vendas = vendas
                 pagina_homepage = self.root.ids['homepage']
                 lista_vendas = pagina_homepage.ids['lista_vendas']
                 for venda in vendas:
@@ -122,13 +128,7 @@ class MainApp(App):
                 # Criar a instância de BannerVendedor com o ID correto
                 banner_vendedor = BannerVendedor(id_vendedor=id_vendedor_equipe)
                 lista_vendedores.add_widget(banner_vendedor)
-
-
-        
         self.mudar_tela('homepage')
-
-
-
 
 
     def mudar_tela(self, id_tela):
@@ -139,27 +139,72 @@ class MainApp(App):
 
     # função para trocar a foto de perfil, chamada como parâmetro na função on_start
     def mudar_foto_perfil(self, foto, *args):
-        print(foto)
         foto_perfil = self.root.ids['foto_perfil']
         foto_perfil.source = f'icones/fotos_perfil/{foto}'
 
         info = json.dumps({"avatar": foto})
         headers = {"Content-Type": "application/json"}
-
         # requisição PATCH com headers
         requisicao = requests.patch(
             f'https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json',
             data=info,
             headers=headers
         )
-
         if requisicao.ok:
-            print('Foto de perfil atualizada com sucesso.')
+            # print('Foto de perfil atualizada com sucesso.')
             self.mudar_tela('ajustespage')
         else:
             print('Erro ao atualizar a foto de perfil:', requisicao.json())
 
         self.mudar_tela('ajustespage')
+
+
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.id_vendedor_adicionado = None  # Inicializa o atributo com um valor padrão
+        self.equipe = ""  # Inicializa o atributo equipe
+
+    def adicionar_vendedor(self, id_vendedor_adicionado):
+        self.id_vendedor_adicionado = id_vendedor_adicionado  # Define o valor do atributo
+        link = f'https://apilactivovendashash-default-rtdb.firebaseio.com/.json?orderBy="id_vendedor"&equalTo={self.id_vendedor_adicionado}'
+        requisicao = requests.get(link)
+        requisicao_dic = requisicao.json()
+        
+        pagina_adicionarvendedor = self.root.ids['adicionarvendedorpage']
+        mensagem_texto = pagina_adicionarvendedor.ids['mensagem_outrovendedor']
+
+        if requisicao_dic == {}:
+            mensagem_texto.text = 'Usuário não encontrado!'
+        else:
+            equipe = self.equipe.split(',')
+            if id_vendedor_adicionado in equipe:
+                mensagem_texto.text = 'Vendedor já faz parte da equipe!'
+            else:
+                # Adicionar o vendedor na equipe
+                self.equipe += f',{id_vendedor_adicionado}'
+                mensagem_texto.text = 'Vendedor adicionado com sucesso!'
+                
+                # Atualizar a equipe no banco de dados
+                info = json.dumps({"equipe": self.equipe})
+                headers = {"Content-Type": "application/json"}
+                requisicao = requests.patch(
+                    f'https://apilactivovendashash-default-rtdb.firebaseio.com/{self.local_id}.json',
+                    data=info,
+                    headers=headers
+                )
+                #adicionar um novo banner na lista de vendedores
+                pagina_listavendedores = self.root.ids['listarvendedorespage']
+                lista_vendedores = pagina_listavendedores.ids['lista_vendedores']
+                banner_vendedor = BannerVendedor(id_vendedor=id_vendedor_adicionado)
+                lista_vendedores.add_widget(banner_vendedor)
+
+                if not requisicao.ok:
+                    print('Erro ao atualizar a equipe no banco de dados:', requisicao.json())
+
+
+
+
 
 if __name__ == "__main__":
     MainApp().run()
