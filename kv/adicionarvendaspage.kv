@@ -5,23 +5,104 @@
                 size: self.size 
                 pos: self.pos
                 source: "icones/bg1.png"
+         #selecionar cliente
         Label:
-            pos_hint: {"right": 0.85, "top": 0.95}
-            size_hint: 0.7, 0.2
+            pos_hint: {"right": 1, "top": 1}
+            size_hint: 1, 0.05
+            text: 'Selecione o Cliente'
+        ScrollView:
+            pos_hint: {"right": 1, "top": 0.95}
+            size_hint: 1, 0.15
+            GridLayout:
+                rows: 1
+                id: lista_clientes   
+                size_hint_x: None
+                width: self.minimum_width
+                column_default_width: '100dp'
+                column_force_default: True
+        #selecionar produto
+        Label:
+            pos_hint: {"right": 1, "top": 0.75}
+            size_hint: 1, 0.05
+            text: 'Selecione o Produto'
+        ScrollView:
+            pos_hint: {"right": 1, "top": 0.7}
+            size_hint: 1, 0.15
+            GridLayout:
+                rows: 1
+                id: lista_produtos   
+                size_hint_x: None
+                width: self.minimum_width
+                column_default_width: '100dp'
+                column_force_default: True
+         #selecionar Data
+        Label:
+            id: label_data
+            pos_hint: {"right": 1, "top": 0.5}
+            size_hint: 1, 0.05
             bold: True
-            text: 'Adicionar Vendas Page'
-        FloatLayout:
-            pos_hint: {"right": 1, "top": 0.12}  # Define a posição do layout
-            size_hint: 1, 0.12  # Define o tamanho do layout flutuante dentro do la
-            canvas: 
-                Color: 
-                    rgba: (0.0, 0.75, 0.75, 0.5)  # Define a cor do retângulo como 
+            text: 'data: 01/01/2025'
+        #selecionar a unidade
+        GridLayout:
+            rows: 1
+            pos_hint: {"right": 0.9, "top": 0.45}
+            size_hint: 0.8, 0.1
+            Label:
+                text: "KG"
+                id: unidades_kg
+            Label:
+                text: "unidades"
+                id: unidades_unidades
+            Label:
+                text: "litros"
+                id: unidades_litros
+         #botões
+         # botão de cancelar venda
+        LabelButton:
+            canvas.before:
                 Rectangle:
-                    size: self.size
                     pos: self.pos
-            ImageButton:
-                pos_hint: {'right': 0.2, 'top': 0.9}  # Define a posição do botão de
-                size_hint: 0.2, 0.8  # Define o tamanho do botão dentro do layout 
-                source: "icones/voltar.png"  # Define a imagem do botão
-                on_release: app.mudar_tela('homepage')  # Chama o método mudar_tela 
-         
+                    size: self.size
+                    source: 'icones/botao.png' if self.state == 'normal' else 'icones/botao_apertado.png '
+            on_release: app.mudar_tela('homepage')
+            text: 'Cancelar'
+            pos_hint: {'right': 0.45, 'top': 0.2}
+            size_hint: 0.4, 0.2
+
+        # botão de adicionar venda
+        LabelButton:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state == 'normal' else 'icones/botao_apertado.png'
+            on_release: print('adicionar venda!')
+            text: 'Adicionar Venda'
+            pos_hint: {'right': 0.95, 'top': 0.2}
+            size_hint: 0.4, 0.2   
+
+        #preço total
+        GridLayout:
+            rows: 1
+            pos_hint: {"right": 0.9, "top": 0.355}
+            size_hint: 0.8, 0.075
+            Label:
+                text: "Preço Total (R$)"
+            TextInput:
+                id: preco_total
+                hint_text: "Digite apenas números"
+        #quantidade
+        GridLayout:
+            rows: 1
+            pos_hint: {"right": 0.9, "top": 0.275}
+            size_hint: 0.8, 0.075
+            Label:
+                text: "Quantidade Total (R$)"
+            TextInput:
+                id: quantidade_total
+                hint_text: "0"
+       
+
+            
+            
+    
