@@ -33,6 +33,32 @@ class MainApp(App):
 
         self.verificar_usuario_logado()
 
+        #carregar as fotos dos clientes
+        arquivos = os.listdir('icones/fotos_clientes')
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+        lista_clientes = pagina_adicionarvendas.ids['lista_clientes']
+        for foto_cliente in arquivos:
+            imagem = ImageButton(source=f'icones/fotos_clientes/{foto_cliente}', on_release=partial(self.mudar_foto_perfil, foto))
+            label = LabelButton(text=foto_cliente.replace('png', '').capitalize())
+            lista_clientes.add_widget(imagem)
+            lista_clientes.add_widget(label)
+
+
+
+        #carregar as fotos dos produtos
+        arquivos = os.listdir('icones/fotos_produtos')
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+        lista_produtos = pagina_adicionarvendas.ids['lista_produtos']
+        for foto_produtos in arquivos:
+            imagem = ImageButton(source=f'icones/fotos_produtos/{foto_produtos}', on_release=partial(self.mudar_foto_perfil, foto))
+            label = LabelButton(text=foto_produtos.replace('png', '').capitalize())
+            lista_produtos.add_widget(imagem)
+            lista_produtos.add_widget(label)
+
+        #carregar as info do usuário
+        self.carregar_infos_usuario()
+
+
 
     def verificar_usuario_logado(self):
         try:
