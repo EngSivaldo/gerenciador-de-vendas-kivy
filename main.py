@@ -10,6 +10,7 @@ import json
 import requests   
 from myfirebase import MyFirebase
 from bannervendedor import BannerVendedor
+from datetime import date
 
 
 # Carregar o arquivo KV
@@ -38,10 +39,11 @@ class MainApp(App):
         pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
         lista_clientes = pagina_adicionarvendas.ids['lista_clientes']
         for foto_cliente in arquivos:
-            imagem = ImageButton(source=f'icones/fotos_clientes/{foto_cliente}', on_release=partial(self.mudar_foto_perfil, foto))
-            label = LabelButton(text=foto_cliente.replace('png', '').capitalize())
+            imagem = ImageButton(source=f'icones/fotos_clientes/{foto_cliente}', on_release=partial(self.selecionar_cliente, foto_cliente))
+            label_text = foto_cliente.replace('.png', '').capitalize()
+            label = LabelButton(text=label_text, on_release=partial(self.selecionar_cliente, foto_cliente))
             lista_clientes.add_widget(imagem)
-            lista_clientes.add_widget(label)
+            lista_clientes.add_widget(label) 
 
 
 
@@ -50,10 +52,16 @@ class MainApp(App):
         pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
         lista_produtos = pagina_adicionarvendas.ids['lista_produtos']
         for foto_produtos in arquivos:
-            imagem = ImageButton(source=f'icones/fotos_produtos/{foto_produtos}', on_release=partial(self.mudar_foto_perfil, foto))
-            label = LabelButton(text=foto_produtos.replace('png', '').capitalize())
+            imagem = ImageButton(source=f'icones/fotos_produtos/{foto_produtos}', on_release=partial(self.selecionar_produto, foto_produtos))
+            label_text = foto_produtos.replace('.png', '').capitalize()
+            label = LabelButton(text=label_text, on_release=partial(self.selecionar_produto, foto_produtos))
             lista_produtos.add_widget(imagem)
             lista_produtos.add_widget(label)
+
+        #carregar a data na pagina adicionarvendaspage
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+        label_data = pagina_adicionarvendas.ids['label_data']
+        label_data.text = f'Data: {date.today().strftime("%d/%m/%y")}'  #d/m/a
 
         #carregar as info do usuário
         self.carregar_infos_usuario()
@@ -227,6 +235,58 @@ class MainApp(App):
 
                 if not requisicao.ok:
                     print('Erro ao atualizar a equipe no banco de dados:', requisicao.json())
+    
+
+    def selecionar_cliente(self, foto, *args):
+        # Pintar de branco todas as outras letras
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+        lista_clientes = pagina_adicionarvendas.ids['lista_clientes']
+
+        for item in list(lista_clientes.children):
+            item.color = (1, 1, 1, 1)
+
+        # Pintar de azul a letra do item selecionado
+        # foto -> carrefour.png / Label -> Carrefour -> carrefour -> carrefour.png
+        for item in lista_clientes.children:
+            try:
+                texto = item.text.lower() + '.png'
+                if foto == texto:
+                    item.color = (0, 207/255, 219/255, 1)
+            except AttributeError:
+                pass
+
+    def selecionar_produto(self, foto, *args):
+        # Pintar de branco todas as outras letras
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+        lista_produtos = pagina_adicionarvendas.ids['lista_produtos']
+
+        for item in list(lista_produtos.children):
+            item.color = (1, 1, 1, 1)
+
+        # Pintar de azul a letra do item selecionado
+        # foto -> produto.png / Label -> Produto -> produto -> produto.png
+        for item in lista_produtos.children:
+            try:
+                texto = item.text.lower() + '.png'
+                if foto == texto:
+                    item.color = (0, 207/255, 219/255, 1)
+            except AttributeError:
+                pass
+
+    def selecionar_unidade(self, id_label, *args):
+        pagina_adicionarvendas = self.root.ids['adicionarvendaspage']
+
+        # Pintar de branco todas as outras letras
+        pagina_adicionarvendas.ids['unidades_kg'].color = (1,1,1,1)
+        pagina_adicionarvendas.ids['unidades_unidades'].color = (1,1,1,1)
+        pagina_adicionarvendas.ids['unidades_litros'].color = (1,1,1,1)
+
+        # Pintar de azul a letra do item selecionado
+        pagina_adicionarvendas.ids[id_label].color = (0, 207/255, 219/255, 1)
+
+
+
+
 
 
 
